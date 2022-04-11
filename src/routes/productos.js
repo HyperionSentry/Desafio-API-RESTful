@@ -68,6 +68,7 @@ router.post('/', (req, res) => {
 router.put('/:num', (req, res) => {
   const numeroLetra = parseInt(req.params.num);
   const body = req.body;
+  console.log(numeroLetra);
 
   const posicion = productos.findIndex((aProduct) => aProduct.id === numeroLetra);
   if (posicion == -1) {
@@ -79,9 +80,30 @@ router.put('/:num', (req, res) => {
   productos[posicion].title = body.title;
   productos[posicion].price = body.price;
 
+
   res.status(201).json({
     data: productos[posicion],
   });
+
+router.delete('/:id', (req, res) => {
+  console.log(req.params);
+  const idBuscado = parseInt(req.params.id);
+
+  const posicion = productos.findIndex((aProduct) => aProduct.id === idBuscado);
+  /** En caso de no encontrar el producto, respondemos con codigo 404 para indicar el error */
+  if (posicion == -1) {
+    return res.status(404).json({
+      msg: 'Product not found',
+    });
+  }
+
+  productos.splice(posicion,1);
+
+  res.json({
+    data: productos,
+  });
+});
+
 
 
 });
